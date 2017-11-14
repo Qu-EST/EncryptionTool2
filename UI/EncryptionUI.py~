@@ -1,0 +1,38 @@
+'''encryptorui'''
+
+from tkinter import TK
+
+class EncryptionUI(TK):
+    def __init__(self):
+        super.__init__(self)
+
+        self.protocol("WM_DELETE_WINDOW", self.on_exit()
+    def on_exit(self):
+        print("on exit")
+        
+#         
+        print("closing the threads")
+        for threads in threading.enumerate():
+            if(not((threads.name=='MainThread') or threads.isDaemon())):
+                
+                #if(threads.)
+                print("closing the thread "+threads.name)
+                print(threads)
+                try:
+                    threads.off()
+                    print(type(threads))
+                    print(threads.is_alive())
+                    threads.join()
+                except AttributeError as e:
+                    print("the thread: {} does not have off. hence skipping to close it.".format(threads.name))
+                
+                        
+        print(threading.active_count())
+        try:
+            self.all_data.encrypt_socket.close()
+        except AttributeError:
+            print("no socket to close")
+        self.quit()
+#         time.sleep(2)
+        print(threading.enumerate())
+        self.quit()  

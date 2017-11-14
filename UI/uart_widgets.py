@@ -8,7 +8,7 @@ from tkinter import Entry
 from tkinter import *
 from threading import Thread, Event
 import os, threading
-
+from EncryptorData import EncryptorData
 
 class InputFrame(Frame):
     ''' Frame for the input of the port no. and baud rate'''
@@ -30,6 +30,19 @@ class InputFrame(Frame):
                 return data
         else: return data
 
+class SaveButton(Button):
+    def __init__(self,master):
+        Button.__init__(self,master,text="Save",command=self.start_save,width=12)
+        alldata=EncryptorData()
+        self.save_data=alldata.save_data
+        self.config(state=DISABLED)
+    def start_save(self):
+        pass
+        print("Starting to save")
+        self.config(state=DISABLED)
+        self.saver=SaveFile(self.save_data)
+        self.saver.start()
+        
 class ChangeButton(Button):        
     def __init__(self,master,console):
         Button.__init__(self,master,text="Load key",command=self.loadkey,width=12)
@@ -189,3 +202,51 @@ class StopButton(Button):
         except AttributeError:
             print("from the gps stop. the type of serial reader is not thread{}".format(type(self.tdc_reader)))            
         self.config(state=DISABLED)    
+class SettingsFrame(Frame):
+    def __init__(self,master):
+        Frame.__init__(self, master)
+        self.all_data=EncryptorData()
+        #TDC Settings
+        master.console = None
+        self.TDC_part=Label(self,text="TDC Setting",width=25)
+        self.port_input=InputFrame(self,label_text="Port No")
+        print("port_type")
+        print(type(self.port_input))
+        self.baud_input=InputFrame(self,label_text="Baud rate")
+        self.change_button=ChangeButton(self,master.console)
+        self.start_button=StartButton(self,master.console)
+        self.saver=SaveButton(self)
+        self.stop_button=StopButton(self)
+        
+        
+        self.TDC_part.grid(row=0, column=0, sticky=W)
+        self.port_input.grid(row=1,column=0, sticky=W)
+        self.baud_input.grid(row=2,column=0,sticky=W)
+        self.baud_input.entry.config(state=DISABLED)   #Disabling the baud input temporarily
+        self.change_button.grid(row=3,column=0,sticky=W)
+        self.start_button.grid(row=4,column=0,sticky=W)
+        self.stop_button.grid(row=5,column=0,sticky=W)
+        self.saver.grid(row=6,column=0,sticky=W)
+        self.saver.config(state=DISABLED)
+        
+        #GPS Settings
+        
+        self.GPS_part=Label(self,text="GPS Setting",width=25)
+        self.gport_input=InputFrame(self,label_text="Port No")
+        print("port_type")
+        print(type(self.port_input))
+        self.gbaud_input=InputFrame(self,label_text="Baud rate")
+        self.gchange_button=ChangeButton(self,master.console)
+        self.gstart_button=StartButton(self,master.console,interface="gps")
+#         self.gstart_button.config(state=DISABLED)
+        #self.saver=UIWidgets.SaveButton(self)
+        self.gstop_button=StopButton(self,interface="gps")
+        
+        
+        self.GPS_part.grid(row=0, column=1, sticky=W)
+        self.gport_input.grid(row=1,column=1, sticky=W)
+        self.gbaud_input.grid(row=2,column=1,sticky=W)
+        #self.gbaud_input.entry.config(state=DISABLED)   #Disabling the baud input temporarily
+        #self.change_button.grid(row=3,column=1,sticky=W)
+        self.gstart_button.grid(row=4,column=1,sticky=W)
+        self.gstop_button.grid(row=5,column=1,sticky=W)

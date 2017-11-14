@@ -20,4 +20,12 @@ class EncryptorData(metaclass=Singleton):
         self.good_ut = Queue(0)
         self.batchlist = {0:"file.csv"}
         self.node_list = []
+        self.serversocket = None
+        self.tdc_reader = ""
+        self.hash_queue = Queue(0)
+        self.save_data = Queue(0)
+        self.hasher = ""
+        self.goodkey = ""
+        self.encrypt_key = "74"
+        self.gps_reader = ""
         
