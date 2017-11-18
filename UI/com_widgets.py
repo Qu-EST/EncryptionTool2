@@ -6,8 +6,19 @@ from tkinter import *
 from threading import Thread, Event
 import os, threading
 from EncryptorData import EncryptorData
+from UI.uart_widgets import *
 
-
+class CheckBoxFrame(Frame):
+    def __init__(self,master,label_text="server"):
+        Frame.__init__(self,master,width=350,height=70)
+        #self.label=Label(self,text=label_text).pack(side=LEFT)
+        self.value=IntVar()
+        self.checkbox=Checkbutton(self,text=label_text,variable=self.value)
+        self.checkbox.pack()
+        
+    def getvalue(self):
+        return self.value.get()
+    
 class ConnectButton(Button):        
     def __init__(self,master,console):
         Button.__init__(self,master,text="Connect",command=self.connectthread,width=12)
