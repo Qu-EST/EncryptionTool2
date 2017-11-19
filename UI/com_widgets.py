@@ -5,7 +5,7 @@ from tkinter import Entry
 from tkinter import *
 from threading import Thread, Event
 import os, threading
-from EncryptorData import EncryptorData
+import EncryptorData
 from UI.uart_widgets import *
 
 class CheckBoxFrame(Frame):
@@ -18,10 +18,39 @@ class CheckBoxFrame(Frame):
         
     def getvalue(self):
         return self.value.get()
+
+
+class ListenButton(Button):
+    def __init__(self, master):
+        Button.__init(self, master, text="Go online", command=self.listenthread, width=12)
+        self.ui = master
+        self.all_data = EncryptorData.EncryptorData()
+        self.listen_thread = None
+
+    def startlisten(self):
+        self.listen_thread = Thread(target=EncryptorData.listen)
+        self.listen_thread.setDaemon(True)
+        self.listen_thread.start()
+
+    def listenthread(self):
+        '''create the server socket and start  network thread'''
+        try:
+            if self.all_data.networkthread.is_alive():
+                print("already listening")
+            else if (self.listen_thread.is_alive())
+                print("starting to listen. Please wait")
+        except AttributeError:
+            self.startlisten()
+        else:
+            self.startlisten()
+            
+            
+            
+        
     
 class ConnectButton(Button):        
     def __init__(self,master,console):
-        Button.__init__(self,master,text="Connect",command=self.connectthread,width=12)
+        Button.__init__(self,master,text="Go Online",command=self.connectthread,width=12)
         self.ui=master
         self.all_data=EncryptorData()
         self.alldata=self.all_data
@@ -40,6 +69,12 @@ class ConnectButton(Button):
         self.conT.setDaemon(True)
         self.conT.start()
         
+    def startlisten(self):
+        try:
+            if self.all_data.networkthread.is_alive():
+                print("already connected")
+            else:
+                pass
     def connectthread(self):
         try:
             if self.conT.is_alive():
