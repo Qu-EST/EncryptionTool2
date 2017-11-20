@@ -37,13 +37,35 @@ class ListenButton(Button):
         try:
             if self.all_data.networkthread.is_alive():
                 print("already listening")
-            else if (self.listen_thread.is_alive())
+            elif self.listen_thread.is_alive():
                 print("starting to listen. Please wait")
         except AttributeError:
             self.startlisten()
         else:
             self.startlisten()
-            
+
+class ErrorCheckButton(Button):
+    def __init__(sefl, master):
+        Button.__init(self, master, text="Error Check", command=self.startec, width=12)
+        self.ui = master
+        self.all_data= EncryptorData.EncryptorData()
+        self.ecthread =  None
+
+    def startecth(self):
+        ip=self.ui.IP_input.get_data()
+        self.ecthread = Thread(target=EncryptorData.errorcheck, args=(ip, True))
+        self.ecthread.setDaemon(True)
+        self.ecthread.start()
+
+    def startec(self):
+        '''create the server socket and start  network thread'''
+        try:
+            if self.ecthread.is_alive():
+                print("starting to listen. Please wait")
+        except AttributeError:
+            self.startecth()
+        else:
+            self.startecth() 
             
             
         
@@ -75,6 +97,8 @@ class ConnectButton(Button):
                 print("already connected")
             else:
                 pass
+        except:
+            pass
     def connectthread(self):
         try:
             if self.conT.is_alive():
@@ -240,16 +264,18 @@ class IP_Communication_settings(Frame):
         self.comm_part=Label(self,text="Communication Setting",width=25)
         self.IP_input=InputFrame(self,label_text="IP:")
         self.if_server=CheckBoxFrame(self,label_text="Server")
-        self.connect=ConnectButton(self,master.console)
-        self.disconnect=DisconnectButton(self)
+        #self.connect=ConnectButton(self,master.console)
+        #self.disconnect=DisconnectButton(self)
+        self.listen=ListenButton(self)
+        self.ecbutton=ErrorCheckButton(self)
         self.start_sending=StartSendingButton(self)
         self.messenger=MessengerButton(self)
         
         self.comm_part.grid(row=0,column=0,sticky=W)
         self.IP_input.grid(row=1,column=0,sticky=W)
         self.if_server.grid(row=2,column=0,sticky=W)
-        self.connect.grid(row=3,column=0,sticky=W)
-        self.disconnect.grid(row=4,column=0,sticky=W)
+        self.listen.grid(row=3,column=0,sticky=W)
+        self.ecbutton.grid(row=4,column=0,sticky=W)
         
         self.start_sending.grid(row=5,column=0,sticky=W)
         self.messenger.grid(row=6,column=0,sticky=W)

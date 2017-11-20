@@ -49,12 +49,13 @@ class EncryptorData(metaclass=Singleton):
         self.mymessenger_server_socket = None
         self.myec_server_socket = None
         self.filelist = []
-        self.file=None          # to fill the filename
+        self.files=None          # to fill the filename
         self.MESSENGERPORT = 5010
         self.ECPORT = 5015
         self.networkthread = None
         self.ecthread={}
         self.messengerthread={}
+        
 def listen():
         '''This method creates a server for the error cheking and the messenger '''
         encryptordata = EncryptorData()
@@ -68,3 +69,11 @@ def listen():
         
         
         
+def errorcheck(ip, qsource):
+    '''connects to the given ip, starts the errorcheck thread'''
+    all_data = EncryptorData()
+    
+    conn= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    conn.connect((ip, all_data.ECPORT))
+    ecthread[conn]=ErrorCheckingThread(conn, qsource)
+    ecthread[conn].start()
