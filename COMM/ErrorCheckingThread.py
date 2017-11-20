@@ -67,10 +67,11 @@ class ErrorCheckingThread(Thread):
                     self.key_oddeven = self.oxor_oddeven[self.oxor_oddeven['xor']==self.sxor_oddeven['xor']]
                     self.skeylist_oddeven= self.key_oddeven.index1.tolist()
                     self.sklist_oddeven.extend(self.key_oddeven.index2.tolist())
-                    self.keydf_oddeven =e.sdf(index=self.sklist_oddeven)############80
+                    self.keydf_oddeven =e.df(index=self.sklist_oddeven)############80
 
                     ############# join the 2 keydf and send the index to the other node
-                    
+                    self.keydf = self.keydf_2half.join(self.keydf_oddeven, how='inner')
+                    print(self.keydf)
                     
 
                 elif(command is "keydf"):
