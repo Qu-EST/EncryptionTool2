@@ -21,6 +21,9 @@ class ErrorCheckingThread(Thread):
         if self.qsource:
             if not self.alldata.filelist:
                 self.files = self.alldata.files
+
+                #################################
+                self.files = "08-24_16-26-38 CW 1mW bur.csv"
             else:
                 self.files = self.alldata.filelist[-1]
             data = self.senddataproc("filename", self.files)
@@ -35,13 +38,19 @@ class ErrorCheckingThread(Thread):
                 command, data = self.receiveddataproc(data)
                 if(command is "filename"):
                     print("in file name block")
+                    PATH = ""
+                    self.files = "08-24_17-26-36 CW-1mW bab.csv"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
                     self.sdf = e.clean_file(sdf)
                     self.sindex = self.sdf.index.to_series()
                     self.alldata.senddict[self.ecsocket].put(self.senddataproc("cleandf",self.sindex))
+                    self.alldata.outputs.extend([self.ecsocket])
                 elif(command is "cleandf"):
                     print("in cleandf block")
                     self.oindex = data
+                    PATH =""
+                    self.sdf = e.read_file_gps_coun(PATH, self.files)
+                    self.sdf = e.clean_file(sdf)              
                     self.sdf = self.sdf.join(self.oindex, how ="inner")
                     self.sdf =self.sdf.drop('index', axis=1)
                     if(self.qsource):
@@ -49,7 +58,8 @@ class ErrorCheckingThread(Thread):
                         sxor_oddeven = e.xor_df(e.split_oddeven(self.sdf), self.sdf)
                         self.alldata.senddict[self.ecsocket].put(self.senddataproc("xor_2half", sxor_2half))
                         self.alldata.senddict[self.ecsocket].put(self.senddataproc("xoroddeven", sxor_oddeven))
-
+                        self.alldata.outputs.extend([self.ecsocket])
+                        self.alldata.outputs.extend([self.ecsocket])
                                                              
                 elif(command is "xor_2half"):
                     self.oxor_2half= data
@@ -75,7 +85,8 @@ class ErrorCheckingThread(Thread):
                     
 
                 elif(command is "keydf"):
-                    pass
+                    print("got keydf")
+                    print(data)
             
            
     def senddataproc(self, command, data):
