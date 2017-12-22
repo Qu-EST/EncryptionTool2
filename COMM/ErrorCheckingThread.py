@@ -28,8 +28,8 @@ class ErrorCheckingThread(Thread):
             else:
                 self.files = self.alldata.filelist[-1]
             data = self.senddataproc("filename", self.files)
-            self.alldata.senddict[ecsocket] = Queue(0)
-            self.alldata.senddict[ecsocket].put(data)
+            self.alldata.senddict[self.ecsocket] = Queue(0)
+            self.alldata.senddict[self.ecsocket].put(data)
         while not self.switch.is_set():
             try:
                 receiveddata = self.alldata.receiveddict[self.ecsocket].get(timeout=1)
