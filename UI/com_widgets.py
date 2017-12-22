@@ -7,6 +7,7 @@ from threading import Thread, Event
 import os, threading
 import EncryptorData
 from UI.uart_widgets import *
+from COMM import tools
 
 class CheckBoxFrame(Frame):
     def __init__(self,master,label_text="server"):
@@ -22,13 +23,13 @@ class CheckBoxFrame(Frame):
 
 class ListenButton(Button):
     def __init__(self, master):
-        Button.__init(self, master, text="Go online", command=self.listenthread, width=12)
+        Button.__init__(self, master, text="Go online", command=self.listenthread, width=12)
         self.ui = master
-        self.all_data = EncryptorData.EncryptorData()
+        self.all_data = EncryptorData()
         self.listen_thread = None
 
     def startlisten(self):
-        self.listen_thread = Thread(target=EncryptorData.listen)
+        self.listen_thread = Thread(target=tools.listen)
         self.listen_thread.setDaemon(True)
         self.listen_thread.start()
 
@@ -45,15 +46,15 @@ class ListenButton(Button):
             self.startlisten()
 
 class ErrorCheckButton(Button):
-    def __init__(sefl, master):
-        Button.__init(self, master, text="Error Check", command=self.startec, width=12)
+    def __init__(self, master):
+        Button.__init__(self, master, text="Error Check", command=self.startec, width=12)
         self.ui = master
-        self.all_data= EncryptorData.EncryptorData()
+        self.all_data=EncryptorData()
         self.ecthread =  None
 
     def startecth(self):
         ip=self.ui.IP_input.get_data()
-        self.ecthread = Thread(target=EncryptorData.errorcheck, args=(ip, True))
+        self.ecthread = Thread(target=tools.errorcheck, args=(ip, True))
         self.ecthread.setDaemon(True)
         self.ecthread.start()
 

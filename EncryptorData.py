@@ -55,25 +55,6 @@ class EncryptorData(metaclass=Singleton):
         self.networkthread = None
         self.ecthread={}
         self.messengerthread={}
+        self.encryptorthread = {}
         
-def listen():
-        '''This method creates a server for the error cheking and the messenger '''
-        encryptordata = EncryptorData()
-        encryptordata.myec_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        encryptordata.mymessenger_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        encryptordata.myec_server_socket.bind((socket.gethostname(), encryptordata.ECPORT))
-        encryptordata.mymessenger_server_socket.bind((socket.gethostname(), encryptordata.MESSENGERPORT))
-        encryptordata.inputs.extend([encryptordata.myec_server_socket, encryptordata.mymessenger_server_socket])
-        encryptordata.networkthread = NetworkThread()
-        encryptordata.networkthread.start()
-        
-        
-        
-def errorcheck(ip, qsource):
-    '''connects to the given ip, starts the errorcheck thread'''
-    all_data = EncryptorData()
-    
-    conn= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    conn.connect((ip, all_data.ECPORT))
-    ecthread[conn]=ErrorCheckingThread(conn, qsource)
-    ecthread[conn].start()
+

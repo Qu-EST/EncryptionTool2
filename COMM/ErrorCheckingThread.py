@@ -1,14 +1,14 @@
 '''module for the errorcheking thread'''
-from queue import Queue,Event
+from queue import Queue, Empty
 import EncryptorData
-from threading import Thread
-import ErrorChecking as e
+from threading import Thread,Event
+from COMM import ErrorChecking as e
 
 
 class ErrorCheckingThread(Thread):
     '''thread to perform the errorchecking operation'''
     def __init__(self,ecsocket, qsource):
-        super.__init__(self)
+        Thread.__init__(self)
         self.switch =Event()
         self.switch.clear()
         self.ecsocket = ecsocket

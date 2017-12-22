@@ -2,24 +2,30 @@
 receives data, and transfers data'''
 import EncryptorData
 import select
-import ErrorCheckingThread
-
+from COMM import ErrorCheckingThread
+from threading import Thread, Event
+from queue import Queue
 
 class NetworkThread(Thread):
     def __init__(self):
-        Thread.__init__()
-        self.encryptordata = EncryptorData()
+        Thread.__init__(self)
+        self.encryptordata = EncryptorData.EncryptorData()
         self.inputs = self.encryptordata.inputs
         self.outputs = self.encryptordata.outputs
         self.senddict = self.encryptordata.senddict
         self.receiveddict = self.encryptordata.receiveddict
         self.switch = Event()
         self.switch.clear()
+        print("inthe network thread")
+        print(self.inputs)
 
-    def start(self):
+    def run(self):
         '''the following will be called when the thread starts'''
         while not self.switch.is_set():
+            print("in while")
+            print(self.inputs)
             readable, writable, exceptional = select.select(self.inputs, self.outputs, self.inputs)
+            print("after select")
 
             for s in readable:
                 if s is self.encryptordata.loginserversocket:
@@ -27,16 +33,20 @@ class NetworkThread(Thread):
                     # parse the data and create appropriate data
                     # create the node frames/ delete the node frames.
                     
-                else if s is self.encryptordata.myec_server_socket: 
+                elif s is self.encryptordata.myec_server_socket: 
                     conn, addr= s.accept()
+                    print("connected to")
+                    print(conn)
                     self.encryptordata.inputs.extend([conn])
-                    self.encryptordata.encryptorthread[conn]= ErrorCheckingThread.ErrorCheckingThread()
+                    conn.setblocking(0)
+                    self.encryptordata.receiveddict[conn]=Queue(0)
+                    self.encryptordata.encryptorthread[conn]= ErrorCheckingThread.ErrorCheckingThread(conn, False)
                     self.encryptordata.encryptorthread[conn].start()
                     pass
             
                     # accepts the connections
                     # create a errorchekgin thread
-                else if s is self.encryptordata.mymessenger_server_socket:
+                elif s is self.encryptordata.mymessenger_server_socket:
                     conn, addr= s.accept()
                     pass
                     # accept the connections
@@ -44,26 +54,27 @@ class NetworkThread(Thread):
                 
                 else:
                     data = self.recv_msg(s)
-                    self.encryptordata.receiveddict[s].put(data))
+                    self.encryptordata.receiveddict[s].put(data)
                 #
-                pass            # put in the queue.
+                #pass            # put in the queue.
 
             for s in writable:
                 s.self.send_msg(s, self.senddict[s].get_nowait())
                 self.outputs.remove(s)
             for s in exceptional:
                 self.inputs.remove(s) # add the other code to remove the socket
-                if s in self.outputs self.outputs.remove(s)
+                if s in self.outputs: self.outputs.remove(s)
                 s.close()
                 del senddict[s]
                 del receiveddict[s]
+        print("after while")
                 
-    def send_msg(sock, msg):
+    def send_msg(self, sock, msg):
         # Prefix each message with a 4-byte length (network byte order)
         msg = struct.pack('>I', len(msg)) + msg
         sock.sendall(msg)
 
-    def recv_msg(sock):
+    def recv_msg(self, sock):
         # Read message length and unpack it into an integer
         raw_msglen = recvall(sock, 4)
         if not raw_msglen:
@@ -72,7 +83,7 @@ class NetworkThread(Thread):
         # Read the message data
         return recvall(sock, msglen)
 
-    def recvall(sock, n):
+    def recvall(self, sock, n):
         # Helper function to recv n bytes or return None if EOF is hit
         data = b''
         while len(data) < n:
