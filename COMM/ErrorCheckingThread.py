@@ -3,6 +3,7 @@ from queue import Queue, Empty
 import EncryptorData
 from threading import Thread,Event
 from COMM import ErrorChecking as e
+import pickle
 
 
 class ErrorCheckingThread(Thread):
