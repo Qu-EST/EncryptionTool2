@@ -27,5 +27,5 @@ def errorcheck(ip, qsource):
     
     conn= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     conn.connect((ip, all_data.ECPORT))
-    ecthread[conn]=ErrorCheckingThread(conn, qsource)
-    ecthread[conn].start()
+    all_data.ecthread[conn]=ErrorCheckingThread(conn, qsource)
+    all_data.ecthread[conn].start()
