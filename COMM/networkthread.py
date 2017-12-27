@@ -22,7 +22,7 @@ class NetworkThread(Thread):
     def run(self):
         '''the following will be called when the thread starts'''
         while not self.switch.is_set():
-            print("in while")
+            print("in networkthread while")
             print(self.inputs)
             readable, writable, exceptional = select.select(self.inputs, self.outputs, self.inputs)
             print("after select")
@@ -48,6 +48,8 @@ class NetworkThread(Thread):
                     # create a errorchekgin thread
                 elif s is self.encryptordata.mymessenger_server_socket:
                     conn, addr= s.accept()
+
+                    
                     pass
                     # accept the connections
                     #create a messengerthread

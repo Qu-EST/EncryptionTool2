@@ -19,6 +19,7 @@ class ErrorCheckingThread(Thread):
         
 
     def run(self):
+        print("Ec thread")
         if self.qsource:
             if not self.alldata.filelist:
                 self.files = self.alldata.files
@@ -27,6 +28,7 @@ class ErrorCheckingThread(Thread):
                 self.files = "08-24_16-26-38 CW 1mW bur.csv"
             else:
                 self.files = self.alldata.filelist[-1]
+            print("sending the filename")
             data = self.senddataproc("filename", self.files)
             self.alldata.senddict[self.ecsocket] = Queue(0)
             self.alldata.senddict[self.ecsocket].put(data)

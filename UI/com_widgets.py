@@ -8,6 +8,7 @@ import os, threading
 import EncryptorData
 from UI.uart_widgets import *
 from COMM import tools
+from UI.messenger import Messenger
 
 class CheckBoxFrame(Frame):
     def __init__(self,master,label_text="server"):
@@ -56,10 +57,12 @@ class ErrorCheckButton(Button):
         ip=self.ui.IP_input.get_data()
         self.ecthread = Thread(target=tools.errorcheck, args=(ip, True))
         self.ecthread.setDaemon(True)
+        print("calling the EC thread")
         self.ecthread.start()
 
     def startec(self):
         '''create the server socket and start  network thread'''
+        print("in EC button")
         try:
             if self.ecthread.is_alive():
                 print("starting to listen. Please wait")
@@ -247,7 +250,7 @@ class MessengerButton(Button):
         alldata=EncryptorData()
         self.alldata=alldata
         self.messenger=alldata.messenger
-        self.config(state=DISABLED)
+        #self.config(state=DISABLED)
     def start_messenger(self):
         pass
         print("Starting the messenger")
