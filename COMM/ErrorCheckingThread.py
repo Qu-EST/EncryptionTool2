@@ -32,6 +32,7 @@ class ErrorCheckingThread(Thread):
             data = self.senddataproc("filename", self.files)
             self.alldata.senddict[self.ecsocket] = Queue(0)
             self.alldata.senddict[self.ecsocket].put(data)
+            self.alldata.outputs.append(self.ecsocket)
         while not self.switch.is_set():
             try:
                 receiveddata = self.alldata.receiveddict[self.ecsocket].get(timeout=1)
@@ -47,7 +48,8 @@ class ErrorCheckingThread(Thread):
                     self.sdf = e.clean_file(sdf)
                     self.sindex = self.sdf.index.to_series()
                     self.alldata.senddict[self.ecsocket].put(self.senddataproc("cleandf",self.sindex))
-                    self.alldata.outputs.extend([self.ecsocket])
+                    self.alldata.outputs.append(self.ecsocket)
+                   
                 elif(command is "cleandf"):
                     print("in cleandf block")
                     self.oindex = data
@@ -60,6 +62,7 @@ class ErrorCheckingThread(Thread):
                         sxor_2half =e.xor_df(e.split_2half(self.sdf), self.sdf)
                         sxor_oddeven = e.xor_df(e.split_oddeven(self.sdf), self.sdf)
                         self.alldata.senddict[self.ecsocket].put(self.senddataproc("xor_2half", sxor_2half))
+                        
                         self.alldata.senddict[self.ecsocket].put(self.senddataproc("xoroddeven", sxor_oddeven))
                         self.alldata.outputs.extend([self.ecsocket])
                         self.alldata.outputs.extend([self.ecsocket])
