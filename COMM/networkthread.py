@@ -5,6 +5,7 @@ import select
 from COMM import ErrorCheckingThread
 from threading import Thread, Event
 from queue import Queue
+import struct
 
 class NetworkThread(Thread):
     def __init__(self):
