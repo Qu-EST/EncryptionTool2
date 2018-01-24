@@ -33,6 +33,8 @@ class ErrorCheckingThread(Thread):
             self.alldata.senddict[self.ecsocket] = Queue(0)
             self.alldata.senddict[self.ecsocket].put(data)
             self.alldata.outputs.append(self.ecsocket)
+            print("the items in the outputs {}".format(self.alldata.outputs))
+            print("the items in the inputs {}".format(self.alldata.inputs))
         while not self.switch.is_set():
             try:
                 receiveddata = self.alldata.receiveddict[self.ecsocket].get(timeout=1)

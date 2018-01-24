@@ -24,10 +24,11 @@ class NetworkThread(Thread):
         while not self.switch.is_set():
             print("in networkthread while")
             print(self.inputs)
-            readable, writable, exceptional = select.select(self.inputs, self.outputs, self.inputs)
+            readable, writable, exceptional = select.select(self.encryptordata.inputs, self.encryptordata.outputs, self.encryptordata.inputs, 1)
             print("after select")
-
+            print("printing the readables {}".format(readable))
             for s in readable:
+                
                 if s is self.encryptordata.loginserversocket:
                     pass
                     # parse the data and create appropriate data
@@ -61,7 +62,10 @@ class NetworkThread(Thread):
                 #pass            # put in the queue.
 
             for s in writable:
-                s.self.send_msg(s, self.senddict[s].get_nowait())
+                print("inwritable")
+                mesg = self.senddict[s].get_nowait()
+                s.self.send_msg(s, mesg)
+                
                 self.outputs.remove(s)
             for s in exceptional:
                 self.inputs.remove(s) # add the other code to remove the socket
