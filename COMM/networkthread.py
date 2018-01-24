@@ -22,11 +22,11 @@ class NetworkThread(Thread):
     def run(self):
         '''the following will be called when the thread starts'''
         while not self.switch.is_set():
-            print("in networkthread while")
-            print(self.inputs)
+            #print("in networkthread while")
+            #print(self.inputs)
             readable, writable, exceptional = select.select(self.encryptordata.inputs, self.encryptordata.outputs, self.encryptordata.inputs, 1)
-            print("after select")
-            print("printing the readables {}".format(readable))
+            #print("after select")
+            #print("printing the readables {}".format(readable))
             for s in readable:
                 
                 if s is self.encryptordata.loginserversocket:
