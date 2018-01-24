@@ -64,7 +64,7 @@ class NetworkThread(Thread):
             for s in writable:
                 print("inwritable")
                 mesg = self.senddict[s].get_nowait()
-                s.self.send_msg(s, mesg)
+                self.send_msg(s, mesg)
                 
                 self.outputs.remove(s)
             for s in exceptional:
