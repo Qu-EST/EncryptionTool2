@@ -41,7 +41,7 @@ class ErrorCheckingThread(Thread):
             except Empty:
                 pass
             else:
-                command, data = self.receiveddataproc(data)
+                command, data = self.receiveddataproc(receiveddata)
                 if(command is "filename"):
                     print("in file name block")
                     PATH = ""
