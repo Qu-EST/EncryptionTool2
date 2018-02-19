@@ -13,7 +13,7 @@ class EncryptionUI(Tk):
         self.setting_frame.pack(side=LEFT)
         self.commframe=CommFrame(self)
         self.commframe.pack(side=RIGHT)
-        self.protocol("WM_DELETE_WINDOW", self.on_exit())
+        self.protocol("WM_DELETE_WINDOW", self.on_exit)
         
 
 
