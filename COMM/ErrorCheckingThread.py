@@ -48,7 +48,7 @@ class ErrorCheckingThread(Thread):
                     PATH = "C:\\Users\\jee11\\OneDrive\\Documents\\QuEST\\EncryptionTool2"
                     self.files = "08-24_17-26-36 CW-1mW bab.csv"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
-                    self.sdf = e.clean_file(sdf)
+                    self.sdf = e.clean_file(self.sdf)
                     self.sindex = self.sdf.index.to_series()
                     self.alldata.senddict[self.ecsocket].put(self.senddataproc("cleandf",self.sindex))
                     self.alldata.outputs.append(self.ecsocket)
@@ -58,7 +58,7 @@ class ErrorCheckingThread(Thread):
                     self.oindex = data
                     PATH = "C:\\Users\\Quest02\\Documents\\EncryptionTool2"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
-                    self.sdf = e.clean_file(sdf)              
+                    self.sdf = e.clean_file(self.sdf)              
                     self.sdf = self.sdf.join(self.oindex, how ="inner")
                     self.sdf =self.sdf.drop('index', axis=1)
                     if(self.qsource):
