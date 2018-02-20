@@ -50,15 +50,20 @@ class ErrorCheckingThread(Thread):
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
                     self.sdf = e.clean_file(self.sdf)
                     self.sindex = self.sdf.index.to_series()
+                    self.alldata.senddict[self.ecsocket] = Queue(0)
                     self.alldata.senddict[self.ecsocket].put(self.senddataproc("cleandf",self.sindex))
                     self.alldata.outputs.append(self.ecsocket)
                    
                 elif(command == "cleandf"):
                     print("in cleandf block")
                     self.oindex = data
-                    PATH = "C:\\Users\\Quest02\\Documents\\EncryptionTool2"
-                    self.sdf = e.read_file_gps_coun(PATH, self.files)
-                    self.sdf = e.clean_file(self.sdf)              
+                    if(self.qsource):
+                        PATH = "C:\\Users\\Quest02\\Documents\\EncryptionTool2"
+                        self.sdf = e.read_file_gps_coun(PATH, self.files)
+                        self.sdf = e.clean_file(self.sdf)
+                        self.sindex = self.sdf.index.to_series()
+                        self.alldata.senddict[self.ecsocket].put(self.senddataproc("cleandf",self.sindex))
+                        self.alldata.outputs.append(self.ecsocket)              
                     self.sdf = self.sdf.join(self.oindex, how ="inner")
                     self.sdf =self.sdf.drop('index', axis=1)
                     if(self.qsource):
@@ -71,8 +76,10 @@ class ErrorCheckingThread(Thread):
                         self.alldata.outputs.extend([self.ecsocket])
                                                              
                 elif(command == "xor_2half"):
+                    print(data)
                     self.oxor_2half= data
                     self.sxor_2half =e.xor_df(e.split_2half(self.sdf), self.sdf)
+                    print(self.sxor_2half)
                     self.key_2half = self.oxor_2half[self.oxor_2half['xor']==self.sxor_2half['xor']]
                     ########################################70
                     self.skeylist_2half= self.key_2half.index1.tolist()
