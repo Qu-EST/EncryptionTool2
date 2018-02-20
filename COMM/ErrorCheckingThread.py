@@ -45,7 +45,7 @@ class ErrorCheckingThread(Thread):
                 print(command)
                 if(command == "filename"):
                     print("in file name block")
-                    PATH = "C:\Users\jee11\OneDrive\Documents\QuEST\EncryptionTool2"
+                    PATH = "C:\\Users\\jee11\\OneDrive\\Documents\\QuEST\\EncryptionTool2"
                     self.files = "08-24_17-26-36 CW-1mW bab.csv"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
                     self.sdf = e.clean_file(sdf)
@@ -56,7 +56,7 @@ class ErrorCheckingThread(Thread):
                 elif(command == "cleandf"):
                     print("in cleandf block")
                     self.oindex = data
-                    PATH ="C:\Users\Quest02\Documents\EncryptionTool2"
+                    PATH = "C:\\Users\\Quest02\\Documents\\EncryptionTool2"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
                     self.sdf = e.clean_file(sdf)              
                     self.sdf = self.sdf.join(self.oindex, how ="inner")
