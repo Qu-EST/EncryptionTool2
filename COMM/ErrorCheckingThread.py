@@ -83,7 +83,7 @@ class ErrorCheckingThread(Thread):
                     self.key_2half = self.oxor_2half[self.oxor_2half['xor']==self.sxor_2half['xor']]
                     ########################################70
                     self.skeylist_2half= self.key_2half.index1.tolist()
-                    self.sklist_2half.extend(self.key_2half.index2.tolist())
+                    self.sklist_2half=self.key_2half.index2.tolist()
                     self.keydf_2half =e.df(index=self.sklist_2half)######################79
                     
                     
@@ -92,7 +92,7 @@ class ErrorCheckingThread(Thread):
                     self.sxor_oddeven = e.xor_df(e.split_oddeven(self.sdf), self.sdf)
                     self.key_oddeven = self.oxor_oddeven[self.oxor_oddeven['xor']==self.sxor_oddeven['xor']]
                     self.skeylist_oddeven= self.key_oddeven.index1.tolist()
-                    self.sklist_oddeven.extend(self.key_oddeven.index2.tolist())
+                    self.sklist_oddeven=self.key_oddeven.index2.tolist()
                     self.keydf_oddeven =e.df(index=self.sklist_oddeven)############80
 
                     ############# join the 2 keydf and send the index to the other node

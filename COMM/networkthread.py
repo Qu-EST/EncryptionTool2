@@ -93,6 +93,7 @@ class NetworkThread(Thread):
                 
     def send_msg(self, sock, msg):
         # Prefix each message with a 4-byte length (network byte order)
+        print(len(msg))
         msg = struct.pack('>I', len(msg)) + msg
         sock.sendall(msg)
 
