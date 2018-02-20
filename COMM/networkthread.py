@@ -58,8 +58,23 @@ class NetworkThread(Thread):
                 
                 else:
                     data = self.recv_msg(s)
+                    #print(s.getsockname()[1])
+                    #print(type(s.getsockname()))
+                    #print(data)
                     self.encryptordata.receiveddict[s].put(data)
-                #
+                    if s.getsockname()[1] is 5015:
+                        try:
+                            if(self.encryptordata.ecthread[s].isalive()):
+                                pass
+                            else:
+                                pass #create thread
+                                self.encryptordata.ecthread[s]=ErrorCheckingThread(s, False)
+                                self.encryptordata.ecthread.start()
+                        except AttributeError:
+                            pass
+                            self.encryptordata.ecthread[s]=ErrorCheckingThread(s, False)
+                            self.encryptordata.ecthread.start()
+                            #create a new thread and 
                 #pass            # put in the queue.
 
             for s in writable:

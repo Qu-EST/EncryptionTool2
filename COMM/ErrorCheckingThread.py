@@ -42,9 +42,10 @@ class ErrorCheckingThread(Thread):
                 pass
             else:
                 command, data = self.receiveddataproc(receiveddata)
-                if(command is "filename"):
+                print(command)
+                if(command == "filename"):
                     print("in file name block")
-                    PATH = ""
+                    PATH = "C:\Users\jee11\OneDrive\Documents\QuEST\EncryptionTool2"
                     self.files = "08-24_17-26-36 CW-1mW bab.csv"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
                     self.sdf = e.clean_file(sdf)
@@ -52,10 +53,10 @@ class ErrorCheckingThread(Thread):
                     self.alldata.senddict[self.ecsocket].put(self.senddataproc("cleandf",self.sindex))
                     self.alldata.outputs.append(self.ecsocket)
                    
-                elif(command is "cleandf"):
+                elif(command == "cleandf"):
                     print("in cleandf block")
                     self.oindex = data
-                    PATH =""
+                    PATH ="C:\Users\Quest02\Documents\EncryptionTool2"
                     self.sdf = e.read_file_gps_coun(PATH, self.files)
                     self.sdf = e.clean_file(sdf)              
                     self.sdf = self.sdf.join(self.oindex, how ="inner")
@@ -69,7 +70,7 @@ class ErrorCheckingThread(Thread):
                         self.alldata.outputs.extend([self.ecsocket])
                         self.alldata.outputs.extend([self.ecsocket])
                                                              
-                elif(command is "xor_2half"):
+                elif(command == "xor_2half"):
                     self.oxor_2half= data
                     self.sxor_2half =e.xor_df(e.split_2half(self.sdf), self.sdf)
                     self.key_2half = self.oxor_2half[self.oxor_2half['xor']==self.sxor_2half['xor']]
@@ -79,7 +80,7 @@ class ErrorCheckingThread(Thread):
                     self.keydf_2half =e.df(index=self.sklist_2half)######################79
                     
                     
-                elif(command is "xoroddeven"):
+                elif(command == "xoroddeven"):
                     self.oxor_oddeven = data
                     self.sxor_oddeven = e.xor_df(e.split_oddeven(self.sdf), self.sdf)
                     self.key_oddeven = self.oxor_oddeven[self.oxor_oddeven['xor']==self.sxor_oddeven['xor']]
@@ -92,7 +93,7 @@ class ErrorCheckingThread(Thread):
                     print(self.keydf)
                     
 
-                elif(command is "keydf"):
+                elif(command == "keydf"):
                     print("got keydf")
                     print(data)
             
