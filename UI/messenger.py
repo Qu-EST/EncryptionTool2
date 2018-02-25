@@ -36,6 +36,8 @@ class Messenger(Tk):
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
         self.alldata=alldata
         #self.sendframe.bind("<Return>", lambda x: self.sendframe.send())
+        # self.sent_console =
+        # sent and received consoles initlizationa and display
     
     def on_exit(self):
         self.alldata=EncryptorData()
