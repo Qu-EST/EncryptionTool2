@@ -71,20 +71,21 @@ class ErrorCheckButton(Button):
         else:
             self.startecth() 
             
-    class MessengerButton(Button):
-        def __init__(self,master):
-            Button.__init__(self,master,text="Messenger",command=self.start_messenger,width=12)
-            alldata=EncryptorData()
-            self.alldata=alldata
-            self.messenger=alldata.messenger
-            #self.config(state=DISABLED)
-        def start_messenger(self):
-            pass
-            print("Starting the messenger")
-            self.config(state=DISABLED)
-            self.messenger=Messenger(self.alldata)
-            self.alldata.messenger=self.messenger
-            self.messenger.mainloop()       
+class MessengerButton(Button):
+    def __init__(self,master):
+        Button.__init__(self,master,text="Messenger",command=self.start_messenger,width=12)
+        alldata=EncryptorData()
+        self.alldata=alldata
+        self.messenger=alldata.messenger
+        #self.config(state=DISABLED)
+    def start_messenger(self):
+        pass
+        print("Starting the messenger")
+        self.config(state=DISABLED)
+        tools.messenger_init()
+        self.messenger=Messenger(self.alldata)
+        self.alldata.messenger=self.messenger
+        self.messenger.mainloop()       
             
     
 class ConnectButton(Button):        

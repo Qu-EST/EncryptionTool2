@@ -1,12 +1,14 @@
+from tkinter import Frame, Text, Label
+from threading import Thread
 class ConsoleFrame(Frame):
-    def __init__(self,master, console_name="micro time"):
+    def __init__(self,master, data_queue, console_name="micro time"):
         Frame.__init__(self,master)
         self.label=Label(self,text=console_name)
         self.console=Text(self,width=30)
         self.label.pack()
         self.console.pack()
-        # self.writer = TextPadWriter(self, 
-        # initilize the writer thread
+        self.writer = TextPadWriter(console_name, data_queue)
+        #self.writer.start()
 class TextPadWriter(Thread):
     def __init__(self, text_pad, data_queue):
         Thread.__init__(self)

@@ -56,4 +56,7 @@ class EncryptorData(metaclass=Singleton):
         self.ecthread={}
         self.messengerthread={}
         self.encryptorthread = {}
-        self.displaymessage = Queue(0)
+        self.displaymessage = {}
+        self.sent_raw_message = {}
+        self.received_raw_message = {}
+        

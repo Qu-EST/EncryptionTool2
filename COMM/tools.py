@@ -32,3 +32,9 @@ def errorcheck(ip, qsource):
     all_data.inputs.append(conn)
     all_data.ecthread[conn]=ErrorCheckingThread(conn, qsource)
     all_data.ecthread[conn].start()
+    
+def messenger_init(msoc):
+    alldata= EncryptorData.EncryptorData()
+    alldata.displaymessage[msoc] = Queue(0)
+    alldata.sent_raw_message[msoc] = Queue(0)
+    alldata.received_raw_message[msoc] = Queue(0)
