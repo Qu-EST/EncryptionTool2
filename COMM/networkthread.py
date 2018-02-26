@@ -50,7 +50,10 @@ class NetworkThread(Thread):
                     # create a errorchekgin thread
                 elif s is self.encryptordata.mymessenger_server_socket:
                     conn, addr= s.accept()
-
+                    self.encryptordata.inputs.extend([conn])
+                    conn.setblocking(0)
+                    tools.messenger_init(conn)
+                    #call the messenger window
                     
                     pass
                     # accept the connections
@@ -62,7 +65,7 @@ class NetworkThread(Thread):
                     #print(type(s.getsockname()))
                     #print(data)
                     self.encryptordata.receiveddict[s].put(data)
-                    if s.getsockname()[1] is 5015:
+                    if s.getsockname()[1] is self.encryptordata.ECPORT:
                         try:
                             if(self.encryptordata.ecthread[s].isalive()):
                                 pass
@@ -74,8 +77,10 @@ class NetworkThread(Thread):
                             pass
                             self.encryptordata.ecthread[s]=ErrorCheckingThread(s, False)
                             self.encryptordata.ecthread.start()
-                            #create a new thread and 
-                #pass            # put in the queue.
+                    elif s.getsockname()[1] is self.encryptordata.MESSENGERPORT:
+                        self.encryptordata.received_raw_message[s].put(data)
+                        #decrypt
+                        self.encryptordata.displaymessage[s].put(data)
 
             for s in writable:
                 print("inwritable")
