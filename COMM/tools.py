@@ -41,5 +41,7 @@ def connect_messenger(ip):
 def messenger_init(msoc):
     alldata= EncryptorData.EncryptorData()
     alldata.displaymessage[msoc] = Queue(0)
+    alldata.senddict[msoc] = Queue(0)
+    alldata.receiveddict[msoc] = Queue(0)
     alldata.sent_raw_message[msoc] = Queue(0)
     alldata.received_raw_message[msoc] = Queue(0)
