@@ -46,7 +46,7 @@ class Messenger(Tk):
         self.sendframe=SendFrame(self,self.send_queue,self.displaymessage,alldata)
         self.sendframe.grid(row=2, column=0, columnspan =2, sticky =W)
         self.display=DisplayThread(self.messagepad,self.displaymessage)
-        #self.display.start()
+        self.display.start()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
         self.alldata=alldata
         #self.sendframe.bind("<Return>", lambda x: self.sendframe.send())

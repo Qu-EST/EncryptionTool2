@@ -8,7 +8,7 @@ class ConsoleFrame(Frame):
         self.label.pack()
         self.console.pack()
         self.writer = TextPadWriter(self, data_queue)
-        #self.writer.start()
+        self.writer.start()
 class TextPadWriter(Thread):
     def __init__(self, text_pad, data_queue):
         Thread.__init__(self)
