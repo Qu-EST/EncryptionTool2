@@ -34,7 +34,7 @@ class Messenger(Tk):
             messenger_socket.connect((ip, alldata.MESSENGERPORT))
             tools.messenger_init(messenger_socket)
         self.send_queue=alldata.send_data
-        self.messagepad=Text(self)
+        self.messagepad=Text(self, height=12)
         #self.messagepad.config(state=DISABLED)
         self.messagepad.grid(row=0, column=0, columnspan=2)
         self.displaymessage=alldata.displaymessage[messenger_socket]
