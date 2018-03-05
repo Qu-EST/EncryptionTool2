@@ -36,15 +36,15 @@ class Messenger(Tk):
         self.send_queue=alldata.send_data
         self.messagepad=Text(self)
         #self.messagepad.config(state=DISABLED)
-        self.messagepad.grid(row=0, column=0)
+        self.messagepad.grid(row=0, column=0, columnspan=2)
         self.displaymessage=alldata.displaymessage[messenger_socket]
         self.sent_console = ConsoleFrame(self, alldata.sent_raw_message[messenger_socket],"Sent Encrypted Message")#)
         self.received_console = ConsoleFrame(self,  alldata.received_raw_message[messenger_socket], "Received Encrypted Message")#)
         # sent and received consoles initlizationa and display
-        self.sent_console.grid(row=0, column=1, sticky =W)
-        self.received_console.grid(row=0, column=2, sticky =W)
+        self.sent_console.grid(row=1, column=0, sticky =W)
+        self.received_console.grid(row=1, column=1, sticky =W)
         self.sendframe=SendFrame(self,self.send_queue,self.displaymessage,alldata)
-        self.sendframe.grid(row=0, column=3, sticky =W)
+        self.sendframe.grid(row=2, column=0, columnspan =2, sticky =W)
         self.display=DisplayThread(self.messagepad,self.displaymessage)
         #self.display.start()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
