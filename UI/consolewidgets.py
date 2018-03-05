@@ -1,5 +1,6 @@
 from tkinter import Frame, Text, Label
 from threading import Thread, Event
+import queue
 class ConsoleFrame(Frame):
     def __init__(self,master, data_queue, console_name="micro time"):
         Frame.__init__(self,master)
@@ -34,7 +35,7 @@ class TextPadWriter(Thread):
             try:
                 data=self.data_queue.get(timeout=1)
                 self.data_queue.task_done()
-            except Empty: pass
+            except queue.Empty: pass
                 #print("no data in queue")    
             else:
                 try:
