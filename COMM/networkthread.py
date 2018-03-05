@@ -6,7 +6,7 @@ from COMM import ErrorCheckingThread, tools
 from threading import Thread, Event
 from queue import Queue
 import struct
-from UI.Messenger import Messenger
+from UI.messenger import Messenger
 class NetworkThread(Thread):
     def __init__(self):
         Thread.__init__(self)

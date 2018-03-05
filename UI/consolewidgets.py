@@ -1,5 +1,5 @@
 from tkinter import Frame, Text, Label
-from threading import Thread
+from threading import Thread, Event
 class ConsoleFrame(Frame):
     def __init__(self,master, data_queue, console_name="micro time"):
         Frame.__init__(self,master)
@@ -7,7 +7,7 @@ class ConsoleFrame(Frame):
         self.console=Text(self,width=30)
         self.label.pack()
         self.console.pack()
-        self.writer = TextPadWriter(console_name, data_queue)
+        self.writer = TextPadWriter(self, data_queue)
         #self.writer.start()
 class TextPadWriter(Thread):
     def __init__(self, text_pad, data_queue):
