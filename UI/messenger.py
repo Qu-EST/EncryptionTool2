@@ -95,15 +95,17 @@ class SendFrame(Frame):
         self.setkeylabel()
         tfh=Twofish(key.encode())
         if(self.alldata.encrypt_key==""):
-            self.send_queue.put("message "+to_send)
+            #self.send_queue.put("message "+to_send)
+            self.alldata.senddict[messenger_socket].put(messenger_socket, "message "+to_send)
+            self.alldata.output.append(messenger_socket)
         else:
             try:
                 encrypted_data=self.alldata.encryptor.encode(to_send,tfh)
             except LookupError:
                 self.alldata.encryptor=Encryptor(b'7774')
                 encrypted_data=self.alldata.encryptor.encode(to_send, tfh)
-            self.send_queue.put((str(index)).encode() + b' ' + encrypted_data)
-            
+            self.alldata.senddict[messenger_socket].put(messenger_socket, str(index).encode() + b' ' + encrypted_data)
+            self.alldata.output.append(messenger_socket)
         
         self.messagequeue.put("ME: "+to_send)
         self.entry.delete(0,'end')
