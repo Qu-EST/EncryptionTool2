@@ -43,7 +43,7 @@ class Messenger(Tk):
         # sent and received consoles initlizationa and display
         self.sent_console.grid(row=1, column=0, sticky =W)
         self.received_console.grid(row=1, column=1, sticky =W)
-        self.sendframe=SendFrame(self,self.send_queue,self.displaymessage,alldata)
+        self.sendframe=SendFrame(self,self.send_queue,self.displaymessage,alldata, messenger_socket)
         self.sendframe.grid(row=2, column=0, columnspan =2, sticky =W)
         self.display=DisplayThread(self.messagepad,self.displaymessage)
         self.display.start()
@@ -68,8 +68,9 @@ class Messenger(Tk):
         
 class SendFrame(Frame):
     
-    def __init__(self,master,send_queue,messagequeue,alldata):
+    def __init__(self,master,send_queue,messagequeue,alldata, messenger_socket):
         Frame.__init__(self,master)
+        self.messenger_socket = messenger_socket
         self.alldata=alldata
         self.send_queue=send_queue
         self.messagequeue=messagequeue
@@ -96,16 +97,16 @@ class SendFrame(Frame):
         tfh=Twofish(key.encode())
         if(self.alldata.encrypt_key==""):
             #self.send_queue.put("message "+to_send)
-            self.alldata.senddict[messenger_socket].put(messenger_socket, "message "+to_send)
-            self.alldata.output.append(messenger_socket)
+            self.alldata.senddict[self.messenger_socket].put("message "+to_send)
+            self.alldata.output.append(self.messenger_socket)
         else:
             try:
                 encrypted_data=self.alldata.encryptor.encode(to_send,tfh)
             except LookupError:
                 self.alldata.encryptor=Encryptor(b'7774')
                 encrypted_data=self.alldata.encryptor.encode(to_send, tfh)
-            self.alldata.senddict[messenger_socket].put(messenger_socket, str(index).encode() + b' ' + encrypted_data)
-            self.alldata.output.append(messenger_socket)
+            self.alldata.senddict[self.messenger_socket].put(str(index).encode() + b' ' + encrypted_data)
+            self.alldata.output.append(self.messenger_socket)
         
         self.messagequeue.put("ME: "+to_send)
         self.entry.delete(0,'end')
