@@ -1,6 +1,7 @@
 from tkinter import Frame, Text, Label
 from threading import Thread, Event
 import queue
+from tkinter.constants import END
 class ConsoleFrame(Frame):
     def __init__(self,master, data_queue, console_name="micro time"):
         Frame.__init__(self,master)
