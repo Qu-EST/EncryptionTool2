@@ -28,7 +28,7 @@ class Messenger(Tk):
         Tk.__init__(self)
         alldata = EncryptorData()
         self.title("QuEST Messenger")
-        if(type(messenger_socket)!="socket"):
+        if(type(messenger_socket)!= socket.socket):
             ip = messenger_socket
             messenger_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             messenger_socket.connect((ip, alldata.MESSENGERPORT))
