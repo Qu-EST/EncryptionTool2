@@ -13,6 +13,8 @@ from twofish import Twofish
 import random
 from UI.consolewidgets import ConsoleFrame
 from EncryptorData import EncryptorData
+import socket
+from COMM import tools
 class Messenger(Tk):
     '''
     classdocs
@@ -26,6 +28,11 @@ class Messenger(Tk):
         Tk.__init__(self)
         alldata = EncryptorData()
         self.title("QuEST Messenger")
+        if(type(messenger_socket)!="socket"):
+            ip = messenger_socket
+            messenger_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            messenger_socket.connect((ip, alldata.MESSENGERPORT))
+            tools.messenger_init(messenger_socket)
         self.send_queue=alldata.send_data
         self.messagepad=Text(self)
         #self.messagepad.config(state=DISABLED)

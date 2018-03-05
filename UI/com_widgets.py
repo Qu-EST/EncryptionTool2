@@ -73,17 +73,35 @@ class ErrorCheckButton(Button):
             
 class MessengerButton(Button):
     def __init__(self,master):
-        Button.__init__(self,master,text="Messenger",command=self.start_messenger,width=12)
+        Button.__init__(self,master,text="Messenger",command=self.connectmessenger,width=12)
         alldata=EncryptorData()
         self.alldata=alldata
         self.messenger=alldata.messenger
         #self.config(state=DISABLED)
-    def start_messenger(self):
-        pass
-        print("Starting the messenger")
-        self.config(state=DISABLED)
-        tools.messenger_init()
-        self.messenger=Messenger(self.alldata)
+        self.mthread = None
+        self.ui = master
+        
+#     def start_messenger(self):
+#         self.config(state=DISABLED)
+#         print("Starting the messenger")
+#         try:
+#             if self.mthread.is_alive():
+#                 print("connecting please wait")
+#         except AttributeError:
+#             self.connectmessengerth()
+#         else:
+#             self.connectmessengerth()
+#         
+    def connectmessenger(self):
+        ip = self.ui.IP_input.get_data()
+#         self.mthread = Thread(target=tools.connect_messenger, args=(ip))
+#         self.mthread.setDaemon(True)
+#         self.mthread.start()
+#         #wait for the thread completion
+#         #check for the exception when the connection crashes
+#         self.mthread.join()
+        #tools.messenger_init()
+        self.messenger=Messenger(ip)
         self.alldata.messenger=self.messenger
         self.messenger.mainloop()       
             

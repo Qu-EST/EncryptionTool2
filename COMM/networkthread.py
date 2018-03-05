@@ -2,11 +2,11 @@
 receives data, and transfers data'''
 import EncryptorData
 import select
-from COMM import ErrorCheckingThread
+from COMM import ErrorCheckingThread, tools
 from threading import Thread, Event
 from queue import Queue
 import struct
-
+from UI.Messenger import Messenger
 class NetworkThread(Thread):
     def __init__(self):
         Thread.__init__(self)
@@ -53,6 +53,9 @@ class NetworkThread(Thread):
                     self.encryptordata.inputs.extend([conn])
                     conn.setblocking(0)
                     tools.messenger_init(conn)
+                    self.messenger=Messenger(conn)
+                    self.encryptordata.messenger=self.messenger
+                    self.messenger.mainloop() 
                     #call the messenger window
                     
                     pass
