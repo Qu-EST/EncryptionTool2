@@ -54,7 +54,7 @@ class ChangeButton(Button):
         
     def loadkey(self):    
         pass
-        os.chdir(r'C:\Users\Quest01\Desktop\EncryptionTool\QuestProject\QuEST')
+        #os.chdir(r'C:\Users\Quest01\Desktop\EncryptionTool\QuestProject\QuEST')
         keyfile=open("Quantum_Keys.txt",'r')
         keylist=keyfile.readlines()
         index=1

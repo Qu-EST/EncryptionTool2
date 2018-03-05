@@ -59,4 +59,5 @@ class EncryptorData(metaclass=Singleton):
         self.displaymessage = {}
         self.sent_raw_message = {}
         self.received_raw_message = {}
+        self.key = {}
         
