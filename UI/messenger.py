@@ -99,7 +99,7 @@ class SendFrame(Frame):
             #self.send_queue.put("message "+to_send)
             self.alldata.senddict[self.messenger_socket].put("message "+to_send)
             self.alldata.sent_raw_message[self.messenger_socket].put("message "+to_send)
-            self.alldata.output.append(self.messenger_socket)
+            self.alldata.outputs.append(self.messenger_socket)
         else:
             try:
                 encrypted_data=self.alldata.encryptor.encode(to_send,tfh)
@@ -108,7 +108,7 @@ class SendFrame(Frame):
                 encrypted_data=self.alldata.encryptor.encode(to_send, tfh)
             self.alldata.senddict[self.messenger_socket].put(str(index).encode() + b' ' + encrypted_data)
             self.alldata.sent_raw_message[self.messenger_socket].put(str(index).encode() + b' ' + encrypted_data)
-            self.alldata.output.append(self.messenger_socket)
+            self.alldata.outputs.append(self.messenger_socket)
         
         self.messagequeue.put("ME: "+to_send)
         self.entry.delete(0,'end')
