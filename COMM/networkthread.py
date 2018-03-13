@@ -53,9 +53,11 @@ class NetworkThread(Thread):
                     self.encryptordata.inputs.extend([conn])
                     conn.setblocking(0)
                     tools.messenger_init(conn)
-                    self.messenger=Messenger(conn)
-                    self.encryptordata.messenger=self.messenger
-                    self.messenger.mainloop() 
+                    mthread = Thread(target = mess, args = (conn))
+                    def mess(conn):
+                        self.messenger=Messenger(conn)
+                        self.encryptordata.messenger=self.messenger
+                        self.messenger.mainloop()
                     #call the messenger window
                     
                     pass
@@ -66,7 +68,7 @@ class NetworkThread(Thread):
                     data = self.recv_msg(s)
                     #print(s.getsockname()[1])
                     #print(type(s.getsockname()))
-                    #print(data)
+                    print(data)
                     self.encryptordata.receiveddict[s].put(data)
                     if s.getsockname()[1] is self.encryptordata.ECPORT:
                         try:
