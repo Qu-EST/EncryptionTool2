@@ -49,15 +49,17 @@ class NetworkThread(Thread):
                     # accepts the connections
                     # create a errorchekgin thread
                 elif s is self.encryptordata.mymessenger_server_socket:
-                    conn, addr= s.accept()
-                    self.encryptordata.inputs.extend([conn])
-                    conn.setblocking(0)
-                    tools.messenger_init(conn)
-                    mthread = Thread(target = mess, args = (conn))
                     def mess(conn):
                         self.messenger=Messenger(conn)
                         self.encryptordata.messenger=self.messenger
                         self.messenger.mainloop()
+                    conn, addr= s.accept()
+                    self.encryptordata.inputs.extend([conn])
+                    conn.setblocking(0)
+                    tools.messenger_init(conn)
+                    mthread = Thread(target = mess, args = (conn,))
+                    mthread.start()
+                    
                     #call the messenger window
                     
                     pass
@@ -66,11 +68,10 @@ class NetworkThread(Thread):
                 
                 else:
                     data = self.recv_msg(s)
-                    #print(s.getsockname()[1])
-                    #print(type(s.getsockname()))
+                    socport = s.getsockname()[1]
                     print(data)
                     self.encryptordata.receiveddict[s].put(data)
-                    if s.getsockname()[1] is self.encryptordata.ECPORT:
+                    if (socport == self.encryptordata.ECPORT):
                         try:
                             if(self.encryptordata.ecthread[s].isalive()):
                                 pass
@@ -82,7 +83,7 @@ class NetworkThread(Thread):
                             pass
                             self.encryptordata.ecthread[s]=ErrorCheckingThread(s, False)
                             self.encryptordata.ecthread.start()
-                    elif s.getsockname()[1] is self.encryptordata.MESSENGERPORT:
+                    elif (socport == self.encryptordata.MESSENGERPORT):
                         self.encryptordata.received_raw_message[s].put(data)
                         #decrypt
                         self.encryptordata.displaymessage[s].put(data)
