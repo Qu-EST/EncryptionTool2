@@ -38,6 +38,11 @@ def connect_messenger(ip):
     conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     conn.connect((ip, all_data.MESSENGERPORT))
     
+class message_obj():
+    def __init__(self, key_id, enc_msg, hash):
+        self.key_id = key_id
+        self.enc_msg = enc_msg
+        self.hash = hash
 def messenger_init(msoc):
     alldata= EncryptorData.EncryptorData()
     alldata.displaymessage[msoc] = Queue(0)

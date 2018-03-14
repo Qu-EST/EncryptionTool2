@@ -2,11 +2,12 @@
 receives data, and transfers data'''
 import EncryptorData
 import select
-from COMM import ErrorCheckingThread, tools
+from COMM import ErrorCheckingThread, tools, Encryptor
 from threading import Thread, Event
 from queue import Queue
 import struct
 from UI.messenger import Messenger
+from twofish import Twofish
 class NetworkThread(Thread):
     def __init__(self):
         Thread.__init__(self)
@@ -19,6 +20,7 @@ class NetworkThread(Thread):
         self.switch.clear()
         print("inthe network thread")
         print(self.inputs)
+        self.encryptor = Encryptor(b'7744')
 
     def run(self):
         '''the following will be called when the thread starts'''
@@ -84,9 +86,15 @@ class NetworkThread(Thread):
                             self.encryptordata.ecthread[s]=ErrorCheckingThread(s, False)
                             self.encryptordata.ecthread.start()
                     elif (socport == self.encryptordata.MESSENGERPORT):
-                        self.encryptordata.received_raw_message[s].put(data)
+                        data = pickle.loads(data)
+                        key_id = data.key_id
+                        enc_msg = data.enc_msg
+                        key = self.encryptordata.key[key_id]
+                        tfh=Twofish(key.encode())
+                        msg = self.encryptor.decode(enc_msg, tfh)
+                        self.encryptordata.received_raw_message[s].put("{} {}".format(key_id, enc_msg))
                         #decrypt
-                        self.encryptordata.displaymessage[s].put(data)
+                        self.encryptordata.displaymessage[s].put(msg)
 
             for s in writable:
                 print("inwritable")
