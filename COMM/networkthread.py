@@ -1,7 +1,7 @@
 '''This is a thread module, creates a listener thread, accepts connections, 
 receives data, and transfers data'''
 import EncryptorData
-import select
+import select, pickle
 from COMM import ErrorCheckingThread, tools
 from COMM.Encryptor import Encryptor
 from threading import Thread, Event
