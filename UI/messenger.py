@@ -14,6 +14,7 @@ import random
 from UI.consolewidgets import ConsoleFrame
 from EncryptorData import EncryptorData
 import socket
+import pickle
 from COMM import tools
 class Messenger(Tk):
     '''
@@ -106,7 +107,9 @@ class SendFrame(Frame):
             except LookupError:
                 self.alldata.encryptor=Encryptor(b'7774')
                 encrypted_data=self.alldata.encryptor.encode(to_send, tfh)
-            self.alldata.senddict[self.messenger_socket].put(str(index).encode() + b' ' + encrypted_data)
+                
+            msg_data = tools.message_obj(index, encrypted_data, None)
+            self.alldata.senddict[self.messenger_socket].put(pickle.dumps(msg_data))
             self.alldata.sent_raw_message[self.messenger_socket].put(str(index).encode() + b' ' + encrypted_data)
             self.alldata.outputs.append(self.messenger_socket)
         

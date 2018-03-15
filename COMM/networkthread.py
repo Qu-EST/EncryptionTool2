@@ -2,7 +2,8 @@
 receives data, and transfers data'''
 import EncryptorData
 import select
-from COMM import ErrorCheckingThread, tools, Encryptor
+from COMM import ErrorCheckingThread, tools
+from COMM.Encryptor import Encryptor
 from threading import Thread, Event
 from queue import Queue
 import struct
