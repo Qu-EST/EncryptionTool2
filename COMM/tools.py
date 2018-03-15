@@ -43,6 +43,7 @@ class message_obj():
         self.key_id = key_id
         self.enc_msg = enc_msg
         self.hash = hash
+        
 def messenger_init(msoc):
     alldata= EncryptorData.EncryptorData()
     alldata.displaymessage[msoc] = Queue(0)

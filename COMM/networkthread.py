@@ -72,9 +72,10 @@ class NetworkThread(Thread):
                 else:
                     data = self.recv_msg(s)
                     socport = s.getsockname()[1]
+                    peerport = s.getpeername()[1]
                     print(data)
                     self.encryptordata.receiveddict[s].put(data)
-                    if (socport == self.encryptordata.ECPORT):
+                    if ((socport == self.encryptordata.ECPORT) or (peerport==self.encryptordata.ECPORT)):
                         try:
                             if(self.encryptordata.ecthread[s].isalive()):
                                 pass
@@ -86,7 +87,7 @@ class NetworkThread(Thread):
                             pass
                             self.encryptordata.ecthread[s]=ErrorCheckingThread(s, False)
                             self.encryptordata.ecthread.start()
-                    elif (socport == self.encryptordata.MESSENGERPORT):
+                    elif ((socport == self.encryptordata.MESSENGERPORT) or (peerport==self.encryptordata.MESSENGERPORT)):
                         data = pickle.loads(data)
                         key_id = data.key_id
                         enc_msg = data.enc_msg
