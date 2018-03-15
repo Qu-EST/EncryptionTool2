@@ -33,6 +33,8 @@ class Messenger(Tk):
             ip = messenger_socket
             messenger_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             messenger_socket.connect((ip, alldata.MESSENGERPORT))
+            messenger_socket.setblocking(0)
+            alldata.inputs.extend([messenger_socket])
             tools.messenger_init(messenger_socket)
         self.send_queue=alldata.send_data
         self.messagepad=Text(self, height=12)
