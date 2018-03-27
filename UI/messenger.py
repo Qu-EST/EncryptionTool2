@@ -16,6 +16,39 @@ from EncryptorData import EncryptorData
 import socket
 import pickle
 from COMM import tools
+from distutils.command.check import check
+class popup(object):
+    def __init__(self, master):
+        self.master=master
+        self.master.attributes("-topmost", 0)
+        top=self.top=Toplevel(master)
+        top.attributes("-topmost", 1)
+        top.attributes("-fullscreen", 1)
+        top.protocol("WM_DELETE_WINDOW", self.enable_top)
+        self.wrong_pass =Label(top, text="wrong password")
+        self.pass_label = Label(top, text="Password")
+        self.pass_entry = Entry(top, show="*")
+        self.submit_button = Button(top, text="submit", command=self.submit)
+        self.close_button =Button(top, text ="close", command=self.enable_top)
+        self.pass_label.grid(column=0, row=1)
+        self.pass_entry.grid(column=1, row=1)
+        self.submit_button.grid(column=3, row=2)
+        self.close_button.grid(column=2, row=2)
+    
+    def enable_top(self):
+        self.master.attributes("-topmost", 1)
+        self.top.destroy()
+        
+    def submit(self):
+        password = self.pass_entry.get()
+        if(password=="lpj"):
+            self.top.destroy()
+            self.alldata=EncryptorData()
+            self.alldata.messenger=""
+            self.master.destroy() 
+        else:
+            self.wrong_pass.grid(column=0, row=0)
+            
 class Messenger(Tk):
     '''
     classdocs
@@ -29,6 +62,8 @@ class Messenger(Tk):
         Tk.__init__(self)
         alldata = EncryptorData()
         self.title("QuEST Messenger")
+        self.attributes("-topmost",1)
+        self.attributes("-fullscreen", 1)
         if(type(messenger_socket)!= socket.socket):
             ip = messenger_socket
             messenger_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -56,10 +91,8 @@ class Messenger(Tk):
         
     
     def on_exit(self):
-        self.alldata=EncryptorData()
-        self.alldata.messenger=""
-        #self.alldata.ui.setting_frame.messenger.config(state=NORMAL)
-        self.destroy()    
+        check_quit = popup(self)
+        self.wait_window(check_quit.top)
         
     def setkey(self):
         self.sendframe.setkeylabel()    

@@ -96,7 +96,7 @@ class NetworkThread(Thread):
                         msg = self.encryptor.decode(enc_msg, tfh)
                         self.encryptordata.received_raw_message[s].put("{} {}".format(key_id, enc_msg))
                         #decrypt
-                        self.encryptordata.displaymessage[s].put("Burchard: {}".format(msg))
+                        self.encryptordata.displaymessage[s].put("Burchard: {}".format(msg.decode('utf-8')))
 
             for s in writable:
                 print("inwritable")
