@@ -2,7 +2,7 @@
 Created on dec 22, 2017
 
 '''
-from tkinter import Tk, Text, Frame, Entry, Button, Label
+from tkinter import Tk, Text, Frame, Entry, Button, Label, Toplevel
 from tkinter.constants import TOP, LEFT, RIGHT, END, BOTTOM, DISABLED, CENTER, W, NORMAL
 #from UI import UIWidgets
 from threading import Thread, Lock
@@ -83,6 +83,8 @@ class Messenger(Tk):
         self.received_console.grid(row=1, column=1, sticky =W)
         self.sendframe=SendFrame(self,self.send_queue,self.displaymessage,alldata, messenger_socket)
         self.sendframe.grid(row=2, column=0, columnspan =2, sticky =W)
+        self.close_button = Button(self, text="close", command=self.on_exit)
+        self.close_button.grid(row=3, column=0)
         self.display=DisplayThread(self.messagepad,self.displaymessage)
         self.display.start()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
