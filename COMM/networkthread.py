@@ -94,7 +94,7 @@ class NetworkThread(Thread):
                         key = self.encryptordata.key[key_id]
                         tfh=Twofish(key.encode())
                         msg = self.encryptor.decode(enc_msg, tfh)
-                        self.encryptordata.received_raw_message[s].put("{} {}".format(key_id, enc_msg))
+                        self.encryptordata.received_raw_message[s].put("{} {}".format(key_id, enc_msg.decode('utf-8')))
                         #decrypt
                         self.encryptordata.displaymessage[s].put("Burchard: {}".format(msg.decode('utf-8')))
 

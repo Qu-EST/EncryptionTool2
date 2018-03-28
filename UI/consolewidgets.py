@@ -6,7 +6,7 @@ class ConsoleFrame(Frame):
     def __init__(self,master, data_queue, console_name="micro time"):
         Frame.__init__(self,master)
         self.label=Label(self,text=console_name)
-        self.console=Text(self,width=40, height=12)
+        self.console=Text(self,width=80, height=25)
         self.label.pack()
         self.console.pack()
         self.writer = TextPadWriter(self, data_queue)

@@ -17,6 +17,7 @@ import socket
 import pickle
 from COMM import tools
 from distutils.command.check import check
+from PIL import ImageTk, Image
 class popup(object):
     def __init__(self, master):
         self.master=master
@@ -28,11 +29,11 @@ class popup(object):
         self.wrong_pass =Label(top, text="wrong password")
         self.pass_label = Label(top, text="Password")
         self.pass_entry = Entry(top, show="*")
-        self.submit_button = Button(top, text="submit", command=self.submit)
-        self.close_button =Button(top, text ="close", command=self.enable_top)
+        self.submit_button = Button(top, text="Close", command=self.submit)
+        self.close_button =Button(top, text ="Cancel", command=self.enable_top)
         self.pass_label.grid(column=0, row=1)
         self.pass_entry.grid(column=1, row=1)
-        self.submit_button.grid(column=3, row=2)
+        self.submit_button.grid(column=1, row=2)
         self.close_button.grid(column=2, row=2)
     
     def enable_top(self):
@@ -64,6 +65,8 @@ class Messenger(Tk):
         self.title("QuEST Messenger")
         self.attributes("-topmost",1)
         self.attributes("-fullscreen", 1)
+        self.messenger_frame=Frame(self)
+        self.messenger_frame.pack()
         if(type(messenger_socket)!= socket.socket):
             ip = messenger_socket
             messenger_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -72,26 +75,38 @@ class Messenger(Tk):
             alldata.inputs.extend([messenger_socket])
             tools.messenger_init(messenger_socket)
         self.send_queue=alldata.send_data
-        self.messagepad=Text(self, height=12)
+        self.title_label=Label(self.messenger_frame,text="Quantum Messenger",font=("Helvetica", 16))
+        self.title_label.grid(row=0,column=0,columnspan=2)
+        self.messagepad=Text(self.messenger_frame, height=25, width=160)
         #self.messagepad.config(state=DISABLED)
-        self.messagepad.grid(row=0, column=0, columnspan=2)
+        self.messagepad.grid(row=1, column=0, columnspan=2)
         self.displaymessage=alldata.displaymessage[messenger_socket]
-        self.sent_console = ConsoleFrame(self, alldata.sent_raw_message[messenger_socket],"Sent Encrypted Message")#)
-        self.received_console = ConsoleFrame(self,  alldata.received_raw_message[messenger_socket], "Received Encrypted Message")#)
+        self.sent_console = ConsoleFrame(self.messenger_frame, alldata.sent_raw_message[messenger_socket],"Sent Encrypted Message")#)
+        self.received_console = ConsoleFrame(self.messenger_frame,  alldata.received_raw_message[messenger_socket], "Received Encrypted Message")#)
         # sent and received consoles initlizationa and display
-        self.sent_console.grid(row=1, column=0, sticky =W)
-        self.received_console.grid(row=1, column=1, sticky =W)
-        self.sendframe=SendFrame(self,self.send_queue,self.displaymessage,alldata, messenger_socket)
-        self.sendframe.grid(row=2, column=0, columnspan =2, sticky =W)
-        self.close_button = Button(self, text="close", command=self.on_exit)
-        self.close_button.grid(row=3, column=0)
+        self.sent_console.grid(row=2, column=0, sticky =W)
+        self.received_console.grid(row=2, column=1, sticky =W)
+        self.sendframe=SendFrame(self.messenger_frame,self.send_queue,self.displaymessage,alldata, messenger_socket)
+        self.sendframe.grid(row=3, column=0, columnspan =2, sticky =W)
+        self.close_button = Button(self.messenger_frame, text="close", command=self.on_exit)
+        self.close_button.grid(row=5, column=0, columnspan=2)
         self.display=DisplayThread(self.messagepad,self.displaymessage)
         self.display.start()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
         self.alldata=alldata
+        self.welcome_label=Label(self.messenger_frame, font=("Helvetica", 16), text="Welcome to Quantum Corner. \nYou are sending messages to another quantum node in Burchard 616 \nThese messages are encrypted by entangled photons states. \nWhat do you think?")
+        self.welcome_label.grid(row=4, column=0, columnspan=2)
         #self.sendframe.bind("<Return>", lambda x: self.sendframe.send())
-        
-    
+        #C:\\Users\\jee11\\OneDrive\\Documents\\QuEST\\EncryptionTool2\\poster
+#         image=Image.open("Slide7.jpg")
+#         print(image)
+#         poster_frame=(self)
+#         poster_frame.pack()
+#         poster = PhotoImage(image, master=poster_frame)
+#         print(poster)
+#         poster_label =  Label(poster_frame, image=poster)
+#         poster_label.pack()
+#     
     def on_exit(self):
         check_quit = popup(self)
         self.wait_window(check_quit.top)
@@ -112,8 +127,8 @@ class SendFrame(Frame):
         self.alldata=alldata
         self.send_queue=send_queue
         self.messagequeue=messagequeue
-        self.entry=Entry(self,width=50)
-        self.sendbutton=Button(self,command=self.send,text="Send",width=12)
+        self.entry=Entry(self,width=150)
+        self.sendbutton=Button(self,command=self.send,text="Send", width=12)
         self.key_label=Label(self)
         self.setkeylabel()
         self.key_label.grid(row=0,column=0,sticky=W)
@@ -164,7 +179,7 @@ class SendFrame(Frame):
             except AttributeError: 
                 text="encryption key: "+self.alldata.encrypt_key
                     
-            self.key_label.config(text=text)
+            self.key_label.config(text="Message to send")
             #self.key_label.grid(row=0,column=0,sticky=W)
             #return text
         
