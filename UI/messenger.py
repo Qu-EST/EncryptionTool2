@@ -19,8 +19,9 @@ from COMM import tools
 from distutils.command.check import check
 from PIL import ImageTk, Image
 class popup(object):
-    def __init__(self, master):
+    def __init__(self, master, action="close"):
         self.master=master
+        self.action=action
         self.master.attributes("-topmost", 0)
         top=self.top=Toplevel(master)
         top.attributes("-topmost", 1)
@@ -29,7 +30,7 @@ class popup(object):
         self.wrong_pass =Label(top, text="wrong password")
         self.pass_label = Label(top, text="Password")
         self.pass_entry = Entry(top, show="*")
-        self.submit_button = Button(top, text="Close", command=self.submit)
+        self.submit_button = Button(top, text="Submit", command=self.submit)
         self.close_button =Button(top, text ="Cancel", command=self.enable_top)
         self.pass_label.grid(column=0, row=1)
         self.pass_entry.grid(column=1, row=1)
@@ -42,11 +43,15 @@ class popup(object):
         
     def submit(self):
         password = self.pass_entry.get()
+        print(self.action)
         if(password=="lpj"):
             self.top.destroy()
-            self.alldata=EncryptorData()
-            self.alldata.messenger=""
-            self.master.destroy() 
+            if(self.action=="close"):
+                self.alldata=EncryptorData()
+                self.alldata.messenger=""
+                self.master.destroy()
+            elif(self.action=="min"):
+                self.master.wm_state("iconic") 
         else:
             self.wrong_pass.grid(column=0, row=0)
             
@@ -88,8 +93,12 @@ class Messenger(Tk):
         self.received_console.grid(row=2, column=1, sticky =W)
         self.sendframe=SendFrame(self.messenger_frame,self.send_queue,self.displaymessage,alldata, messenger_socket)
         self.sendframe.grid(row=3, column=0, columnspan =2, sticky =W)
-        self.close_button = Button(self.messenger_frame, text="close", command=self.on_exit)
-        self.close_button.grid(row=5, column=0, columnspan=2)
+        self.window_opt_frame=Frame(self.messenger_frame)
+        self.window_opt_frame.grid(row=5, column=0, columnspan=2)
+        self.close_button = Button(self.window_opt_frame, text="close", command=self.on_exit)
+        self.close_button.grid(row=0, column=0)
+        self.minmize_button = Button(self.window_opt_frame, text="minimize", command=self.on_min)
+        self.minmize_button.grid(row=0, column=1)
         self.display=DisplayThread(self.messagepad,self.displaymessage)
         self.display.start()
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -110,10 +119,12 @@ class Messenger(Tk):
     def on_exit(self):
         check_quit = popup(self)
         self.wait_window(check_quit.top)
-        
+    def on_min(self):
+        check_min = popup(self, action="min")
+        self.wait_window(check_min.top)
     def setkey(self):
         self.sendframe.setkeylabel()    
-    
+        
         
         
     
