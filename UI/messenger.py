@@ -18,6 +18,7 @@ import pickle
 from COMM import tools
 from distutils.command.check import check
 from PIL import ImageTk, Image
+import datetime
 class popup(object):
     def __init__(self, master, action="close"):
         self.master=master
@@ -176,7 +177,7 @@ class SendFrame(Frame):
             self.alldata.sent_raw_message[self.messenger_socket].put(str(index).encode() + b' ' + encrypted_data)
             self.alldata.outputs.append(self.messenger_socket)
         
-        self.messagequeue.put("ME: "+to_send)
+        self.messagequeue.put(datetime.date.strftime(datetime.datetime.now(),'%m/%d-%H:%M:%S')+"\nME: "+to_send)
         self.entry.delete(0,'end')
         
     def setkeylabel(self):

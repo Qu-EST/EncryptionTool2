@@ -9,6 +9,7 @@ from queue import Queue
 import struct
 from UI.messenger import Messenger
 from twofish import Twofish
+import datetime
 class NetworkThread(Thread):
     def __init__(self):
         Thread.__init__(self)
@@ -96,7 +97,7 @@ class NetworkThread(Thread):
                         msg = self.encryptor.decode(enc_msg, tfh)
                         self.encryptordata.received_raw_message[s].put("{} {}".format(key_id, enc_msg))
                         #decrypt
-                        self.encryptordata.displaymessage[s].put("Burchard: {}".format(msg.decode('utf-8')))
+                        self.encryptordata.displaymessage[s].put(datetime.date.strftime(datetime.datetime.now(),'%m/%d-%H:%M:%S')+"\nBurchard: {}".format(msg.decode('utf-8')))
 
             for s in writable:
                 print("inwritable")
